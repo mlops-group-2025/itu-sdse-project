@@ -50,6 +50,9 @@ def main(
     actual_min_date = data["date_part"].min()
     actual_max_date = data["date_part"].max()
     date_limits = {"min_date": str(actual_min_date), "max_date": str(actual_max_date)}
+    
+    INTERIM_DATA_DIR.mkdir(parents=True, exist_ok=True)
+    
     with open(INTERIM_DATA_DIR / 'date_limits.json', 'w') as f:
         json.dump(date_limits, f)
     logger.info(f"Date range: {actual_min_date} to {actual_max_date}")

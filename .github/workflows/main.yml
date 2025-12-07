@@ -1,0 +1,33 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  dagger-pipeline:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup DVC
+        uses: iterative/setup-dvc@v1
+
+      - name: Pull DVC Data
+        run: dvc update data/raw/raw_data.csv.dvc
+
+      - name: Run Dagger Pipeline
+        uses: dagger/dagger-for-github@v7
+        with:
+          verb: call
+          args: pipeline --source . export --path ./models.tar
+          version: "latest"
+
+      - name: Upload Model Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: model
+          path: models.tar
