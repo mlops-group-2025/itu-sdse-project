@@ -4,7 +4,6 @@ venv/
 .dvc/
 mlruns/
 notebooks/
-data/
 models/
 reports/
 
